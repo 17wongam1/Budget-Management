@@ -8,12 +8,14 @@
 		$emailError = null;
 		$mobileError = null;
 		$birthError = null;
+		$addressError = null;
 		
 		// keep track post values
 		$name = $_POST['name'];
 		$email = $_POST['email'];
 		$mobile = $_POST['mobile'];
 		$birth = $_POST['birth'];
+		$address = $_POST['address'];
 		
 		// validate input
 		$valid = true;
@@ -40,13 +42,18 @@
 			$valid = false;
 		}
 		
+		if (empty($address)) {
+			$addressError = 'Please enter a valid address';
+			$valid = false;
+		}
+		
 		// insert data
 		if ($valid) {
 			$pdo = Database::connect();
 			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-			$sql = "INSERT INTO customers (name,email,mobile) values(?, ?, ?)";
+			$sql = "INSERT INTO customers (name,email,mobile,birth,address) values(?, ?, ?, ?, ?)";
 			$q = $pdo->prepare($sql);
-			$q->execute(array($name,$email,$mobile));
+			$q->execute(array($name,$email,$mobile,$birth,$address));
 			Database::disconnect();
 			header("Location: index.php");
 		}
@@ -107,6 +114,16 @@
 					      	<?php endif;?>
 					    </div>
 					  </div>
+					  <divclass="control-group <?php echo !empty($addressError)?'error':'';?>">
+					    <label class="control-label">Address</label>
+					    <div class="controls">
+							<textarea name="address" placeholder="Address" rows="5" cols="80" value="<?php echo !empty($address)?$address:'';?>"></textarea>
+					      	<?php if (!empty($addressError)): ?>
+					      		<span class="help-inline"><?php echo $addressError;?></span>
+					      	<?php endif;?>
+					    </div>
+					  </div>
+
 					  <div class="form-actions">
 						  <button type="submit" class="btn btn-success">Create</button>
 						  <a class="btn" href="index.php">Back</a>

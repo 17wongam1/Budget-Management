@@ -23,6 +23,7 @@
 		                  <th>Email Address</th>
 		                  <th>Mobile Number</th>
                       <th>Date of Birth</th>
+                      <th>Address</th>
 		                  <th>Action</th>
 		                </tr>
 		              </thead>
@@ -37,6 +38,7 @@
 							   	echo '<td>'. $row['email'] . '</td>';
 							   	echo '<td>'. $row['mobile'] . '</td>';
                  echo '<td>'. $row['birth'] . '</td>';
+                 echo '<td>'. $row['address']. '</td>';
 							   	echo '<td width=250>';
 							   	echo '<a class="btn" href="read.php?id='.$row['id'].'">Read</a>';
 							   	echo '&nbsp;';

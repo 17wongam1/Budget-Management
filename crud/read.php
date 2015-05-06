@@ -67,6 +67,15 @@
 						    </label>
 					    </div>
 					  </div>
+					  <div class="control-group">
+					    <label class="control-label">Address</label>
+					    <div class="controls">
+					      	<label class="checkbox">
+						     	<?php echo $data['address'];?>
+						    </label>
+					    </div>
+					  </div>
+					
 					    <div class="form-actions">
 						  <a class="btn" href="index.php">Back</a>
 					   </div>
