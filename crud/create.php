@@ -1,5 +1,5 @@
 <?php 
-	
+	//test
 	require 'database.php';
 
 	if ( !empty($_POST)) {
