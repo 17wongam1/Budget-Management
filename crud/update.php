@@ -69,7 +69,7 @@
 		$name = $data['name'];
 		$email = $data['email'];
 		$mobile = $data['mobile'];
-		$birth = $birth ['birth'];
+		$birth = $data ['birth'];
 		Database::disconnect();
 	}
 ?>
