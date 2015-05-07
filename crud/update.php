@@ -17,12 +17,14 @@
 		$emailError = null;
 		$mobileError = null;
 		$birthError = null;
+		$addressError = null;
 		
 		// keep track post values
 		$name = $_POST['name'];
 		$email = $_POST['email'];
 		$mobile = $_POST['mobile'];
 		$birth = $_POST['birth'];
+		$address = $_POST['address'];
 		
 		// validate input
 		$valid = true;
@@ -49,13 +51,19 @@
 			$valid = false;
 		}
 		
+		if (empty($address)) {
+			$addressError = 'Please enter a valid address';
+			$valid = false;
+		}
+		
+		
 		// update data
 		if ($valid) {
 			$pdo = Database::connect();
 			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-			$sql = "UPDATE customers  set name = ?, email = ?, mobile =?, birth =? WHERE id = ?";
+			$sql = "UPDATE customers  set name = ?, email = ?, mobile =?, birth =?, address =? WHERE id = ?";
 			$q = $pdo->prepare($sql);
-			$q->execute(array($name,$email,$mobile,$birth,$id));
+			$q->execute(array($name,$email,$mobile,$birth,$address,$id));
 			Database::disconnect();
 			header("Location: index.php");
 		}
@@ -70,6 +78,7 @@
 		$email = $data['email'];
 		$mobile = $data['mobile'];
 		$birth = $data ['birth'];
+		$address = $data ['address'];
 		Database::disconnect();
 	}
 ?>
@@ -89,6 +98,7 @@
     			<div class="span10 offset1">
     				<div class="row">
 		    			<h3>Update a Customer</h3>
+					
 		    		</div>
     		
 	    			<form class="form-horizontal" action="update.php?id=<?php echo $id?>" method="post">
@@ -128,6 +138,16 @@
 					      	<?php endif;?>
 					    </div>
 					  </div>
+					  <div class="control-group <?php echo !empty($addressError)?'error':'';?>">
+					    <label class="control-label">Address</label>
+					    <div class="controls">
+					      	<textarea name="address" placeholder="Address"><?php echo !empty($address)?$address:'';?></textarea>
+					      	<?php if (!empty($addressError)): ?>
+					      		<span class="help-inline"><?php echo $addressError;?></span>
+					      	<?php endif;?>
+					    </div>
+					  </div>
+					
 					  <div class="form-actions">
 						  <button type="submit" class="btn btn-success">Update</button>
 						  <a class="btn" href="index.php">Back</a>
