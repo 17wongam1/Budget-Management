@@ -13,46 +13,16 @@
 	
 	if ( !empty($_POST)) {
 		// keep track validation errors
-		$nameError = null;
-		$emailError = null;
-		$mobileError = null;
-		$birthError = null;
-		$addressError = null;
+		$statusError = null;
 		
 		// keep track post values
-		$name = $_POST['name'];
-		$email = $_POST['email'];
-		$mobile = $_POST['mobile'];
-		$birth = $_POST['birth'];
-		$address = $_POST['address'];
+		$status = $_POST['status'];
 		
 		// validate input
 		$valid = true;
-		if (empty($name)) {
-			$nameError = 'Please enter Name';
-			$valid = false;
-		}
-		
-		if (empty($email)) {
-			$emailError = 'Please enter Email Address';
-			$valid = false;
-		} else if ( !filter_var($email,FILTER_VALIDATE_EMAIL) ) {
-			$emailError = 'Please enter a valid Email Address';
-			$valid = false;
-		}
-		
-		if (empty($mobile)) {
-			$mobileError = 'Please enter Mobile Number';
-			$valid = false;
-		}
-		
-		if (empty($birth)) {
-			$birthError = 'Please enter Date of Birth as DD/MM/YYYY';
-			$valid = false;
-		}
-		
-		if (empty($address)) {
-			$addressError = 'Please enter a valid address';
+
+		if (empty($status)) {
+			$statusError = 'Please select a valid status.';
 			$valid = false;
 		}
 		
@@ -61,9 +31,9 @@
 		if ($valid) {
 			$pdo = Database::connect();
 			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-			$sql = "UPDATE customers  set name = ?, email = ?, mobile =?, birth =?, address =? WHERE id = ?";
+			$sql = "UPDATE customers  set status = ? WHERE id = ?";
 			$q = $pdo->prepare($sql);
-			$q->execute(array($name,$email,$mobile,$birth,$address,$id));
+			$q->execute(array($department,$name,$amount,$reason,$status,$id));
 			Database::disconnect();
 			header("Location: index.php");
 		}
@@ -74,11 +44,7 @@
 		$q = $pdo->prepare($sql);
 		$q->execute(array($id));
 		$data = $q->fetch(PDO::FETCH_ASSOC);
-		$name = $data['name'];
-		$email = $data['email'];
-		$mobile = $data['mobile'];
-		$birth = $data ['birth'];
-		$address = $data ['address'];
+		$status = $data ['status'];
 		Database::disconnect();
 	}
 ?>
@@ -100,50 +66,19 @@
 		    			<h3>Update a Customer</h3>
 					
 		    		</div>
-    		
-	    			<form class="form-horizontal" action="update.php?id=<?php echo $id?>" method="post">
-					  <div class="control-group <?php echo !empty($nameError)?'error':'';?>">
-					    <label class="control-label">Name</label>
+    
+					  <div class="control-group <?php echo !empty($statusError)?'error':'';?>">
+					    <label class="control-label">Status</label>
 					    <div class="controls">
-					      	<input name="name" type="text"  placeholder="Name" value="<?php echo !empty($name)?$name:'';?>">
-					      	<?php if (!empty($nameError)): ?>
-					      		<span class="help-inline"><?php echo $nameError;?></span>
-					      	<?php endif; ?>
-					    </div>
-					  </div>
-					  <div class="control-group <?php echo !empty($emailError)?'error':'';?>">
-					    <label class="control-label">Email Address</label>
-					    <div class="controls">
-					      	<input name="email" type="text" placeholder="Email Address" value="<?php echo !empty($email)?$email:'';?>">
-					      	<?php if (!empty($emailError)): ?>
-					      		<span class="help-inline"><?php echo $emailError;?></span>
-					      	<?php endif;?>
-					    </div>
-					  </div>
-					  <div class="control-group <?php echo !empty($mobileError)?'error':'';?>">
-					    <label class="control-label">Mobile Number</label>
-					    <div class="controls">
-					      	<input name="mobile" type="text"  placeholder="Mobile Number" value="<?php echo !empty($mobile)?$mobile:'';?>">
-					      	<?php if (!empty($mobileError)): ?>
-					      		<span class="help-inline"><?php echo $mobileError;?></span>
-					      	<?php endif;?>
-					    </div>
-					  </div>
-					  <div class="control-group <?php echo !empty($birthError)?'error':'';?>">
-					    <label class="control-label">Date of Birth</label>
-					    <div class="controls">
-					      	<input name="birth" type="text"  placeholder="DD/MM/YY" value="<?php echo !empty($birth)?$birth:'';?>">
-					      	<?php if (!empty($birthError)): ?>
-					      		<span class="help-inline"><?php echo $birthError;?></span>
-					      	<?php endif;?>
-					    </div>
-					  </div>
-					  <div class="control-group <?php echo !empty($addressError)?'error':'';?>">
-					    <label class="control-label">Address</label>
-					    <div class="controls">
-					      	<textarea name="address" placeholder="Address"><?php echo !empty($address)?$address:'';?></textarea>
-					      	<?php if (!empty($addressError)): ?>
-					      		<span class="help-inline"><?php echo $addressError;?></span>
+					      	<select name="status">
+
+							  <option value="pending">Pending</option>
+							  <option value="granted">Granted</option>
+							  <option value="rejected">Rejected</option>
+							</select>
+
+					      	<?php if (!empty($statusError)): ?>
+					      		<span class="help-inline"><?php echo $statusError;?></span>
 					      	<?php endif;?>
 					    </div>
 					  </div>

@@ -36,42 +36,34 @@
 		    		
 	    			<div class="form-horizontal" >
 					  <div class="control-group">
-					    <label class="control-label">Name</label>
+					    <label class="control-label">Department</label>
 					    <div class="controls">
 						    <label class="checkbox">
+						     	<?php echo $data['department'];?>
+						    </label>
+					    </div>
+					  </div>
+					  <div class="control-group">
+					    <label class="control-label">Name</label>
+					    <div class="controls">
+					      	<label class="checkbox">
 						     	<?php echo $data['name'];?>
 						    </label>
 					    </div>
 					  </div>
 					  <div class="control-group">
-					    <label class="control-label">Email Address</label>
+					    <label class="control-label">Amount</label>
 					    <div class="controls">
 					      	<label class="checkbox">
-						     	<?php echo $data['email'];?>
+						     	<?php echo $data['amount'];?>
 						    </label>
 					    </div>
 					  </div>
 					  <div class="control-group">
-					    <label class="control-label">Mobile Number</label>
+					    <label class="control-label">Reason</label>
 					    <div class="controls">
 					      	<label class="checkbox">
-						     	<?php echo $data['mobile'];?>
-						    </label>
-					    </div>
-					  </div>
-					  <div class="control-group">
-					    <label class="control-label">Date of Birth</label>
-					    <div class="controls">
-					      	<label class="checkbox">
-						     	<?php echo $data['birth'];?>
-						    </label>
-					    </div>
-					  </div>
-					  <div class="control-group">
-					    <label class="control-label">Address</label>
-					    <div class="controls">
-					      	<label class="checkbox">
-						     	<?php echo $data['address'];?>
+						     	<?php echo $data['reason'];?>
 						    </label>
 					    </div>
 					  </div>
