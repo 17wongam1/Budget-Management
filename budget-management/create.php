@@ -1,46 +1,58 @@
 <?php 
 	
 	require 'database.php';
+	require 'functions.php';
 
 	if ( !empty($_POST)) {
 		// keep track validation errors
 		$departmentError = null;
-		$nameError = null;
+		$teacherError = null;
+		$emailError = null;
 		$amountError = null;
-		$reasonError = null;
 		$statusError = null;
+		$reasonError = null;
 		
 		// keep track post values
 		$department = $_POST['department'];
-		$name = $_POST['name'];
+		$teacher = $_POST['teacher'];
+		$email = $_POST['email'];
 		$amount = $_POST['amount'];
+		$status = $_POST['status'];
 		$reason = $_POST['reason'];
-		// $status = $_POST['status'];
 		
 		// validate input
-		$valid = true;
+
 		if (empty($department)) {
-			$departmentError = 'Please select a valid department';
+			$departmentError = 'Please enter Department Name';
+			$valid = false;
+		}
+
+		$valid = true;
+		if (empty($teacher)) {
+			$teacherError = 'Please enter teacher';
 			$valid = false;
 		}
 		
-		if (empty($name)) {
-			$nameError = 'Please enter a valid name';
+		if (empty($email)) {
+			$emailError = 'Please enter Email Address';
+			$valid = false;
+		} else if ( !filter_var($email,FILTER_VALIDATE_EMAIL) ) {
+			$emailError = 'Please enter a valid Email Address';
 			$valid = false;
 		}
-		
+
 		if (empty($amount)) {
-			$amountError = 'Please enter a valid amount';
+			$amountError = 'Please enter a valid amount (cannot be more then 6 digits)';
 			$valid = false;
 		}
-		
+
 		if (empty($reason)) {
 			$reasonError = 'Please enter a valid reason';
 			$valid = false;
 		}
-		
+
 		if (empty($status)) {
-			$statusError = 'Please select a valid status';
+			$statusError = 'Please enter a valid status';
 			$valid = false;
 		}
 		
@@ -48,9 +60,9 @@
 		if ($valid) {
 			$pdo = Database::connect();
 			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-			$sql = "INSERT INTO request (department,name,amount,reason) values(?, ?, ?, ?, ?)";
+			$sql = "INSERT INTO customers (department,teacher,email,amount,reason,status) values(?, ?, ?, ?, ?, ?)";
 			$q = $pdo->prepare($sql);
-			$q->execute(array($department,$name,$amount,$reason));
+			$q->execute(array($department,$teacher,$email,$amount,$reason,$status));
 			Database::disconnect();
 			header("Location: index.php");
 		}
@@ -71,16 +83,13 @@
     
     			<div class="span10 offset1">
     				<div class="row">
-		    			<h3>Create a Request</h3>
+		    			<h3>Create a Customer</h3>
 		    		</div>
-    		
-	    			<form class="form-horizontal" action="create.php" method="post">
-					  <div class="control-group <?php echo !empty($departmentError)?'error':'';?>">
-					    <label class="control-label">Department</label>
+
+		    		<div class="control-group <?php echo !empty($departmentError)?'error':'';?>">
+					    <label class="control-label">Department Name</label>
 					    <div class="controls">
-					      	<!-- <input name="name" type="text" placeholder="Department" value="<?php echo !empty($name)?$name:'';?>"> -->
-					      	
-					      	<select name="Department">
+					      	<select name="department">
 					      	  <option value="#">Select...</option>
 							  <option value="Arts and Physical Education">Arts and Physical Education</option>
 							  <option value="English">English</option>
@@ -112,41 +121,71 @@
 							  <option value="Security Services">Security Services</option>
 							  <option value="Non-School Hour Services">Non-School Hour Services</option>
 							</select>  
-
-					    </div>
-					  </div>
-					  <div class="control-group <?php echo !empty($nameError)?'error':'';?>">
-					    <label class="control-label">Name</label>
-					    <div class="controls">
-					      	<input name="name" type="text" placeholder="Name" value="<?php echo !empty($name)?$name:'';?>">
-					      	<?php if (!empty($nameError)): ?>
-					      		<span class="help-inline"><?php echo $nameError;?></span>
+					      	<?php if (!empty($departmentError)): ?>
+					      		<span class="help-inline"><?php echo $departmentError;?></span>
 					      	<?php endif;?>
 					    </div>
-					  </div>
-					  <div class="control-group <?php echo !empty($amountError)?'error':'';?>">
-					    <label class="control-label">Amount</label>
+    		
+	    			<form class="form-horizontal" action="create.php" method="post">
+					  <div class="control-group <?php echo !empty($teacherError)?'error':'';?>">
+					    <label class="control-label">Teacher</label>
 					    <div class="controls">
-					      	<input name="amount" type="text"  placeholder="Amount" value="<?php echo !empty($amount)?$amount:'';?>">
-					      	<?php if (!empty($amountError)): ?>
-					      		<span class="help-inline"><?php echo $amountError;?></span>
-					      	<?php endif;?>
+					    	<select name="teacher">
+					    	  <option value="#">Select...</option>
+							  <option value="Mr.Farrow">Mr.Farrow</option>
+							  <option value="Mr.Nickey">Mr.Nickey</option>
+							  <option value="Mr.Karan">Mr.Karan</option>
+							</select>
+					      	<?php if (!empty($teacherError)): ?>
+					      		<span class="help-inline"><?php echo $teacherError;?></span>
+					      	<?php endif; ?>
 					    </div>
 					  </div>
-					  <divclass="control-group <?php echo !empty($reasonError)?'error':'';?>">
-					    <label class="control-label">Reason</label>
+					  <div class="control-group <?php echo !empty($emailError)?'error':'';?>">
+					    <label class="control-label">Email Address</label>
 					    <div class="controls">
-							<textarea name="reason" placeholder="Address" rows="5" cols="80" value="<?php echo !empty($reason)?$reason:'';?>"></textarea>
-					      	<?php if (!empty($reasonError)): ?>
-					      		<span class="help-inline"><?php echo $reasonError;?></span>
+					      	<input name="email" type="text" placeholder="Email Address" value="<?php echo !empty($email)?$email:'';?>">
+					      	<?php if (!empty($emailError)): ?>
+					      		<span class="help-inline"><?php echo $emailError;?></span>
 					      	<?php endif;?>
 					    </div>
 					  </div>
 					  
+
+					  </div>
+					    <!-- amount -->
+					    <div class="control-group <?php echo !empty($amountError)?'error':'';?>">
+						    <label class="control-label">Amount Requested</label>
+						    <div class="controls">
+						      	<input name="amount" type="text" placeholder="Amount requested" value="<?php echo !empty($amount)?$amount:'';?>">
+						      	<?php if (!empty($amountError)): ?>
+						      		<span class="help-inline"><?php echo $amountError;?></span>
+						      	<?php endif;?>
+						    </div>
+					    </div>
+					    <!-- reason -->
+
+					    <div class="control-group <?php echo !empty($reasonError)?'error':'';?>">
+						    <label class="control-label">Reason for budget request</label>
+						    <div class="controls">
+						      	<textarea name="reason" placeholder="Reason for Budget Request" rows="5" cols="80" value="<?php echo !empty($reason)?$reason:'';?>"></textarea>
+						      	<?php if (!empty($reasonError)): ?>
+						      		<span class="help-inline"><?php echo $reasonError;?></span>
+						      	<?php endif;?>
+						    </div>
+						</div>
+					  
+					  <!-- status -->
+					  <div class="control-group <?php echo !empty($statusError)?'error':'';?>">
+					    <div class="controls">
+					      	<input name="status" type="hidden" value="Requested" >
+					    </div>
+					  </div>
+
 					  <div class="form-actions">
 						  <button type="submit" class="btn btn-success">Create</button>
 						  <a class="btn" href="index.php">Back</a>
-						</div>
+					  </div>
 					</form>
 				</div>
 				

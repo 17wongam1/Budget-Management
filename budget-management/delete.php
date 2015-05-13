@@ -13,7 +13,7 @@
 		// delete data
 		$pdo = Database::connect();
 		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		$sql = "DELETE FROM requests  WHERE id = ?";
+		$sql = "DELETE FROM customers  WHERE id = ?";
 		$q = $pdo->prepare($sql);
 		$q->execute(array($id));
 		Database::disconnect();
@@ -40,7 +40,7 @@
 		    		
 	    			<form class="form-horizontal" action="delete.php" method="post">
 	    			  <input type="hidden" name="id" value="<?php echo $id;?>"/>
-					  <p class="alert alert-error">Are you sure you want to delete this request?</p>
+					  <p class="alert alert-error">Are you sure to delete ?</p>
 					  <div class="form-actions">
 						  <button type="submit" class="btn btn-danger">Yes</button>
 						  <a class="btn" href="index.php">No</a>

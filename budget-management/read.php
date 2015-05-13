@@ -10,7 +10,7 @@
 	} else {
 		$pdo = Database::connect();
 		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		$sql = "SELECT * FROM requests where id = ?";
+		$sql = "SELECT * FROM customers where id = ?";
 		$q = $pdo->prepare($sql);
 		$q->execute(array($id));
 		$data = $q->fetch(PDO::FETCH_ASSOC);
@@ -31,51 +31,34 @@
     
     			<div class="span10 offset1">
     				<div class="row">
-		    			<h3>Read a Customer</h3>
+		    			<h3>Read a Request</h3>
 		    		</div>
-		    		
-	    			<div class="form-horizontal" >
-					  <div class="control-group">
+		    		<div class="control-group">
 					    <label class="control-label">Department</label>
 					    <div class="controls">
-						    <label class="checkbox">
+					      	<label class="checkbox">
 						     	<?php echo $data['department'];?>
 						    </label>
 					    </div>
 					  </div>
+	    			<div class="form-horizontal" >
 					  <div class="control-group">
-					    <label class="control-label">Name</label>
+					    <label class="control-label">Teacher</label>
 					    <div class="controls">
-					      	<label class="checkbox">
-						     	<?php echo $data['name'];?>
+						    <label class="checkbox">
+						     	<?php echo $data['teacher'];?>
 						    </label>
 					    </div>
 					  </div>
 					  <div class="control-group">
-					    <label class="control-label">Amount</label>
+					    <label class="control-label">Email Address</label>
 					    <div class="controls">
 					      	<label class="checkbox">
-						     	<?php echo $data['amount'];?>
+						     	<?php echo $data['email'];?>
 						    </label>
 					    </div>
 					  </div>
-					  <div class="control-group">
-					    <label class="control-label">Reason</label>
-					    <div class="controls">
-					      	<label class="checkbox">
-						     	<?php echo $data['reason'];?>
-						    </label>
-					    </div>
-					  </div>
-					  <div class="control-group">
-						    <label class="control-label">Status</label>
-						    <div class="controls">
-						      	<label class="checkbox">
-							     	<?php echo $data['status'];?>
-							    </label>
-						    </div>
-						  </div>
-						
+					  
 					    <div class="form-actions">
 						  <a class="btn" href="index.php">Back</a>
 					   </div>
