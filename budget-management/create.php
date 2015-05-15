@@ -1,8 +1,7 @@
 <?php 
 	
 	require 'database.php';
-	require 'functions.php';
-
+	
 	if ( !empty($_POST)) {
 		// keep track validation errors
 		$departmentError = null;
